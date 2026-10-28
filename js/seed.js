@@ -26,7 +26,7 @@ export function seedDemo() {
       facilities: ["AC", "Wi-Fi", "Power socket at desk", "Personal locker", "Drinking water (RO)", "CCTV", "Washroom", "Separate girls' section", "Power backup"],
       about: "Quiet, fully air-conditioned hall with 48 individual desks, each with a lamp and charging socket. Popular with RAS, SSC and banking aspirants.",
       upi: "demo-owner@upi", payeeName: "Mahesh Gupta", bank: { holder: "Mahesh Gupta", bank: "State Bank of India", acc: "XXXXXXXX4321", ifsc: "SBIN0000000" },
-      billing: "joining", dueDay: 5, graceDays: 5, autoReleaseDays: 10,
+      billing: "joining", dueDay: 5, graceDays: 5, autoReleaseDays: 20,
       notices: [{ at: now - 2 * day, text: "Library stays open on Diwali, 6 AM – 2 PM only." }],
     },
     {
@@ -146,6 +146,12 @@ export function seedDemo() {
     const n = 2 + Math.floor(rnd() * 4);
     for (let i = 0; i < n; i++) db.reviews[`rev-${l.id}-${i}`] = { libraryId: l.id, studentId: `seed-stu-${i}`, name: `${pick(first)} ${pick(last).charAt(0)}.`, rating: 3 + Math.floor(rnd() * 3), text: pick(texts), createdAt: now - Math.floor(rnd() * 60) * day };
   });
+
+  db.visits = {};
+  for (let d = 0; d < 14; d++) {
+    const n = 18 + Math.floor(rnd() * 30) + d * 2;
+    for (let i = 0; i < n; i++) db.visits[`v-${d}-${i}`] = { day: addDays(T, d - 13), role: pick(["guest", "guest", "student", "student", "owner"]), at: now };
+  }
 
   db["libraries/lib-ekagra/waitlist"] = { "seed-stu-9": { name: "Tanvi Saini", phone: "9001200078", createdAt: now - 2 * day } };
   return db;

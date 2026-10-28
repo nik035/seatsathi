@@ -325,6 +325,14 @@ async function profilePage() {
   $("#reset-demo")?.addEventListener("click", () => { store.resetDemo(); toast("Demo data reset."); go("#/"); });
 }
 
+// One anonymous record per browser per day, for the admin's visitor chart
+function logVisit() {
+  const d = new Date(); const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const key = "ss_visit_" + (S.profile?.role || "guest");
+  try { if (localStorage.getItem(key) === day) return; localStorage.setItem(key, day); } catch { return; }
+  store.add("visits", { day, role: S.profile?.role || "guest", at: Date.now() }).catch(() => {});
+}
+
 // ───────── Boot ─────────
 async function boot() {
   document.title = APP_NAME;
@@ -340,6 +348,7 @@ async function boot() {
     S.user = u;
     S.profile = u ? await store.get(`users/${u.uid}`).catch(() => null) : null;
     S.ready = true;
+    logVisit();
     const onLogin = location.hash.startsWith("#/login");
     if (u && onLogin) return afterLogin();
     if (first || !u) { first = false; route(); } else route();

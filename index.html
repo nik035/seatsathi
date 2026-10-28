@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SeatSathi — find and book a study library seat</title>
+  <meta name="description" content="Find self-study libraries near you, see free seats live, book your desk and pay the owner directly. Owners manage seats, fees, reminders and reports.">
+  <meta name="theme-color" content="#2e6a4e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="demo-flag" class="demo-flag" hidden>Demo mode — data is saved only in this browser. <a href="https://github.com/nik035/seatsathi#connect-firebase" target="_blank" rel="noopener">Connect Firebase</a> to go fully live.</div>
+  <header class="site-head">
+    <div class="wrap head-row">
+      <a href="#/" class="brand" aria-label="SeatSathi home">
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="12" width="26" height="5" rx="1.5" fill="currentColor"/><rect x="6" y="17" width="3" height="11" rx="1" fill="currentColor"/><rect x="23" y="17" width="3" height="11" rx="1" fill="currentColor"/><path d="M20 12V5.5a1.5 1.5 0 0 1 2.4-1.2l3 2.3" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="26.5" cy="8" r="2.5" fill="#d9a441"/></svg>
+        <span>SeatSathi</span>
+      </a>
+      <button id="menu-toggle" class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <div id="nav-links" class="nav-links"></div>
+        <div id="nav-user" class="nav-user"></div>
+      </nav>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"><div class="loading">Loading…</div></main>
+  <footer class="site-foot">
+    <div class="wrap row-between">
+      <p>SeatSathi — study library seats, sorted.</p>
+      <p class="small"><a href="#/find">Find a seat</a> · <a href="#/login?as=owner">For library owners</a> · <a href="#/news">Current affairs</a></p>
+    </div>
+  </footer>
+  <noscript><p class="wrap">SeatSathi needs JavaScript turned on.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

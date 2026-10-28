@@ -1,0 +1,10 @@
+{
+  "name": "SeatSathi",
+  "short_name": "SeatSathi",
+  "description": "Find and book study library seats. Owners manage seats, fees and reports.",
+  "start_url": "./#/",
+  "display": "standalone",
+  "background_color": "#f2f3ef",
+  "theme_color": "#2e6a4e",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
