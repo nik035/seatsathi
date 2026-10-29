@@ -7,17 +7,18 @@
 //    (Use the same email in firestore.rules.)
 // ─────────────────────────────────────────────────────────────
 
-export const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+export const firebaseConfig = {
+  apiKey: "AIzaSyAt-fxW7CHPP1s_L5gvn3fOgpk7Ylvj4cI",
+  authDomain: "seatsathi-c337a.firebaseapp.com",
+  projectId: "seatsathi-c337a",
+  storageBucket: "seatsathi-c337a.firebasestorage.app",
+  messagingSenderId: "989185095374",
+  appId: "1:989185095374:web:a2fc905e6ada16c4a1029f",
+  measurementId: "G-V463QH5PTP"
 };
 
 export const ADMIN_EMAILS = [
-  // "you@gmail.com"
+  "nikhileshbad07@gmail.com"
 ];
 
 export const APP_NAME = "SeatSathi";
