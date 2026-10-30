@@ -1,7 +1,9 @@
 // Data layer. Same API for Firebase (live) and Demo (browser localStorage).
-import { FIREBASE_CONFIG } from "./config.js";
+import * as CFG from "./config.js";
 import { seedDemo } from "./seed.js";
 
+// Accept either name, so pasting Firebase's own snippet ("firebaseConfig") also works
+const FIREBASE_CONFIG = CFG.FIREBASE_CONFIG || CFG.firebaseConfig || {};
 const FB_VER = "10.12.2";
 const useFirebase = !!FIREBASE_CONFIG.apiKey;
 

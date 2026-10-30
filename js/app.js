@@ -72,7 +72,9 @@ export async function route() {
     await m.fn(m.params, () => seq === routeSeq);
   } catch (err) {
     console.error(err);
-    if (seq === routeSeq) main().innerHTML = `<section class="wrap empty-page"><h1>Something went wrong</h1><p>${esc(err.message || err)}</p><p><a href="#/">Back to home</a></p></section>`;
+    const perm = String(err.code || err.message || "").includes("permission");
+    if (seq === routeSeq) main().innerHTML = `<section class="wrap empty-page"><h1>${perm ? "The database refused this request" : "Something went wrong"}</h1>
+      <p>${perm ? "Firestore security rules are blocking it. In the Firebase console open Firestore Database → Rules, paste the contents of firestore.rules from the GitHub repo (with your admin email filled in) and click Publish." : esc(err.message || err)}</p><p><a href="#/">Back to home</a></p></section>`;
   }
   if (seq === routeSeq) { window.scrollTo(0, 0); $("#main h1")?.setAttribute("tabindex", "-1"); }
 }
@@ -278,7 +280,8 @@ async function welcome() {
     const f = formData(e.target);
     const prof = { role: as, name: f.name, phone: f.phone, city: f.city, email: S.user.email, createdAt: Date.now() };
     if (as === "student") Object.assign(prof, { area: f.area || "", exam: f.exam || "", ...(pos || {}), news: { on: false, scope: "city", place: f.city } });
-    await store.set(`users/${S.user.uid}`, prof);
+    try { await store.set(`users/${S.user.uid}`, prof); }
+    catch (err) { return toast(String(err.code).includes("permission") ? "Couldn't save your profile: the database rules aren't published yet." : err.message, "err"); }
     S.profile = prof;
     toast("Profile saved.");
     go(as === "owner" ? "#/o/setup" : "#/find");
