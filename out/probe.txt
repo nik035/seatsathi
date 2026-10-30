@@ -1,0 +1,40 @@
+== libraries (public read)
+200
+{}
+
+== users (must be denied)
+403
+{
+  "error": {
+    "code": 403,
+    "message": "Missing or insufficient permissions.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+== memberships (must be denied)
+403
+{
+  "error": {
+    "code": 403,
+    "message": "Missing or insufficient permissions.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+== seats collection group (public read)
+200
+[{
+  "readTime": "2026-10-30T08:14:50.595285Z"
+}
+]
+== google sign-in + authorized domain
+200
+{
+  "kind": "identitytoolkit#CreateAuthUriResponse",
+  "authUri": "https://accounts.google.com/o/oauth2/auth?response_type=id_token&client_id=989185095374-o04teiqi3ddorak0sce2usbqituvl0tt.apps.googleusercontent.com&redirect_uri=https://nik035.github.io/seatsathi/&state=AMbdmDm0DipLpXm9jVfaZ7Mf162yG8mjoeNfX7vm8xa2cnBMP99xDcTNeASioIuSNhEiaz1r75WYihgRJ03C2dUj6VxIefJ1UTUdP7UCd3781qOhws7JZ-fhIDv1naSrwY
+== unauthorized-domain control
+200
+{
+  "kind": "identitytoolkit#CreateAuthUriResponse",
+  "authUri": "https://accounts.google.com/o/oauth2/auth?response_type=id_token&client_id=989185095374-o04teiqi3ddorak0sce2usbqituvl0tt.apps.googleusercontent.com&redirect_uri=https://example.org/&state=AMbdmDnyRoo4Jna6092mFuH1KaFNWrZNj13jKPXf7oUev

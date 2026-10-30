@@ -1,0 +1,38 @@
+{
+ "desktop #/": {
+  "text": "Find a quiet seat to study, close to home.\n\nBrowse self-study libraries near you, see which desks are free right now, pick your seat and pay the owner directly. No calls, no wasted trips.\n\nFind a seat\nList your library\nSaraswati Self Study Library\nMalviya Nagar · 11 of 48 desks free\nEntrance & recep",
+  "demoBanner": false
+ },
+ "desktop #/find": {
+  "text": "Study libraries near you\n\nTurn on location to sort by distance.\n\nList\nMap\nAll cities\nAny fee\nUp to ₹600\nUp to ₹800\nUp to ₹1,000\nUp to ₹1,200\nUp to ₹1,500\nUp to ₹2,000\nNearest first\nLowest fee\nMost free seats\nBest rated\nUse my location\nAC\nWi-Fi\nOpen 24×7\nSeparate girls' section\nPersonal locker\nPower ",
+  "demoBanner": false
+ },
+ "desktop #/news": {
+  "text": "Current affairs\n\nHeadlines from the last 24 hours, refreshed every few hours from Google News.\n\nShowing a preview. Sign in as a student to subscribe and filter by your locality.\nMy area\nCity\nCountry\nWorld\nTopics\nJaipur\nLucknow\nDelhi\nMumbai\nKota\nPatna\nPrayagraj\nIndore\nBhopal\nVaranasi\nKanpur\nBengaluru",
+  "demoBanner": false
+ },
+ "desktop #/login?as=owner": {
+  "text": "I'm a student\nI own a library\nSign in to manage your library\n\nNew here? Create an account and set up your library in about 5 minutes.\n\nContinue with Google\nor use email\nFull name\nEmail\nPassword\nSign in\n\nNew here? Create an account · Forgot password",
+  "demoBanner": false
+ },
+ "google popup": "no popup: TargetClosedError('Page.wait_for_timeout: Target page, context or browser has been closed')",
+ "toast after google click": "This website isn't authorised in Firebase yet. Add it under Authentication → Settings → Authorized domains.",
+ "desktop errors": [],
+ "phone #/": {
+  "text": "Find a quiet seat to study, close to home.\n\nBrowse self-study libraries near you, see which desks are free right now, pick your seat and pay the owner directly. No calls, no wasted trips.\n\nFind a seat\nList your library\nSaraswati Self Study Library\nMalviya Nagar · 11 of 48 desks free\nEntrance & recep",
+  "demoBanner": false
+ },
+ "phone #/find": {
+  "text": "Study libraries near you\n\nTurn on location to sort by distance.\n\nList\nMap\nAll cities\nAny fee\nUp to ₹600\nUp to ₹800\nUp to ₹1,000\nUp to ₹1,200\nUp to ₹1,500\nUp to ₹2,000\nNearest first\nLowest fee\nMost free seats\nBest rated\nUse my location\nAC\nWi-Fi\nOpen 24×7\nSeparate girls' section\nPersonal locker\nPower ",
+  "demoBanner": false
+ },
+ "phone #/news": {
+  "text": "Current affairs\n\nHeadlines from the last 24 hours, refreshed every few hours from Google News.\n\nShowing a preview. Sign in as a student to subscribe and filter by your locality.\nMy area\nCity\nCountry\nWorld\nTopics\nJaipur\nLucknow\nDelhi\nMumbai\nKota\nPatna\nPrayagraj\nIndore\nBhopal\nVaranasi\nKanpur\nBengaluru",
+  "demoBanner": false
+ },
+ "phone #/login?as=owner": {
+  "text": "I'm a student\nI own a library\nSign in to manage your library\n\nNew here? Create an account and set up your library in about 5 minutes.\n\nContinue with Google\nor use email\nFull name\nEmail\nPassword\nSign in\n\nNew here? Create an account · Forgot password",
+  "demoBanner": false
+ },
+ "phone errors": []
+}
