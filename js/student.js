@@ -122,7 +122,8 @@ export async function find(_, alive) {
     $("#results").hidden = st.view !== "list";
     $("#mapbox").hidden = st.view !== "map";
     if (st.view === "list") {
-      $("#results").innerHTML = r.length ? `<ul class="lib-list">${r.map(libRow).join("")}</ul>` :
+      $("#results").innerHTML = r.length ? `<ul class="lib-list">${r.map(libRow).join("")}</ul>` : !libs.length ?
+        `<div class="empty"><p>No libraries are listed yet.</p><p class="small muted">Own a study library? <a href="#/login?as=owner">List it free</a> and students nearby can book seats online.</p></div>` :
         `<div class="empty"><p>No libraries match these filters.</p><p class="small muted">Try another city or clear the facility filters. Library owners can <a href="#/login?as=owner">list their library here</a>.</p></div>`;
     } else {
       map?.remove();
