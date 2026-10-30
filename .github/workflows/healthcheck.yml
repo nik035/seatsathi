@@ -1,0 +1,55 @@
+name: Health check (temporary)
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q playwright && python -m playwright install --with-deps chromium > /dev/null
+      - name: Probe
+        run: |
+          mkdir -p out
+          K=$(grep -oP 'apiKey:\s*"\K[^"]+' js/config.js); P=$(grep -oP 'projectId:\s*"\K[^"]+' js/config.js)
+          B="https://firestore.googleapis.com/v1/projects/$P/databases/(default)/documents"
+          {
+            echo "== libraries (public read)"; curl -s -o /tmp/a -w "%{http_code}\n" "$B/libraries?key=$K&pageSize=5"; head -c 600 /tmp/a; echo
+            echo "== users (must be denied)"; curl -s -o /tmp/a -w "%{http_code}\n" "$B/users?key=$K&pageSize=1"; head -c 300 /tmp/a; echo
+            echo "== memberships (must be denied)"; curl -s -o /tmp/a -w "%{http_code}\n" "$B/memberships?key=$K&pageSize=1"; head -c 300 /tmp/a; echo
+            echo "== seats collection group (public read)"; curl -s -o /tmp/a -w "%{http_code}\n" -H 'Content-Type: application/json' -d '{"structuredQuery":{"from":[{"collectionId":"seats","allDescendants":true}],"limit":3}}' "$B:runQuery?key=$K"; head -c 400 /tmp/a; echo
+            echo "== google sign-in + authorized domain"; curl -s -o /tmp/a -w "%{http_code}\n" -H 'Content-Type: application/json' -d '{"providerId":"google.com","continueUri":"https://nik035.github.io/seatsathi/"}' "https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=$K"; head -c 400 /tmp/a; echo
+            echo "== unauthorized-domain control"; curl -s -o /tmp/a -w "%{http_code}\n" -H 'Content-Type: application/json' -d '{"providerId":"google.com","continueUri":"https://example.org/"}' "https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=$K"; head -c 300 /tmp/a; echo
+          } > out/probe.txt 2>&1
+          cat > /tmp/live.py <<'PY'
+          import asyncio, json
+          from playwright.async_api import async_playwright
+          async def main():
+              res = {}
+              async with async_playwright() as p:
+                  b = await p.chromium.launch()
+                  for name, w, h in [("desktop", 1280, 900), ("phone", 390, 844)]:
+                      pg = await b.new_page(viewport={"width": w, "height": h})
+                      errs = []
+                      pg.on("pageerror", lambda e, errs=errs: errs.append("PAGEERR " + str(e)))
+                      pg.on("console", lambda m, errs=errs: errs.append(f"{m.type}: {m.text}") if m.type in ("error", "warning") else None)
+                      for route in ["#/", "#/find", "#/news", "#/login?as=owner"]:
+                          await pg.goto("https://nik035.github.io/seatsathi/" + route, wait_until="networkidle")
+                          await pg.wait_for_timeout(2500)
+                          key = f"{name} {route}"
+                          res[key] = {"text": (await pg.inner_text("#main"))[:300], "demoBanner": await pg.is_visible("#demo-flag")}
+                          await pg.screenshot(path=f"out/{name}-{route.strip('#/').replace('/','_').replace('?','_') or 'home'}.png", full_page=(name == "desktop"))
+                      res[name + " errors"] = errs[:20]
+                  await b.close()
+              json.dump(res, open("out/live.json", "w"), indent=1, ensure_ascii=False)
+          asyncio.run(main())
+          PY
+          python /tmp/live.py || echo "live test crashed" >> out/probe.txt
+      - name: Save results to branch
+        run: |
+          git config user.name "seatsathi-bot"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan healthcheck-results; git rm -rfq . ; git add -f out; git commit -qm "health check results"
+          git push -f origin healthcheck-results
