@@ -14,6 +14,8 @@ BASE = "https://news.google.com/rss"
 PARAMS = "hl=en-IN&gl=IN&ceid=IN:en"
 UA = {"User-Agent": "Mozilla/5.0 (SeatSathi news bot; +https://github.com)"}
 DAY_MS = 24 * 3600 * 1000
+SITE = "https://nik035.github.io/seatsathi/news"   # previous build, used when Google is slow
+BUDGET_S = 240                                       # stop calling Google after 4 minutes
 
 TOPIC_QUERIES = {
     "Economy": "India economy OR RBI OR GDP OR inflation",
@@ -58,15 +60,23 @@ def parse(xml_bytes):
     return out[:40]
 
 
-def fetch(url):
-    for attempt in range(3):
+def fetch(url, tries=2, timeout=12):
+    for attempt in range(tries):
         try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20) as r:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
                 return r.read()
-        except Exception as e:
-            if attempt == 2:
+        except Exception:
+            if attempt == tries - 1:
                 raise
-            time.sleep(2 + attempt * 3)
+            time.sleep(2)
+
+
+def previous(key):
+    """Last published copy of a feed, so a slow Google run never empties the site."""
+    try:
+        return json.loads(fetch(f"{SITE}/{key}.json", tries=1, timeout=8))
+    except Exception:
+        return None
 
 
 def search(q):
@@ -87,17 +97,26 @@ def build():
     for t in js_list("NEWS_TOPICS"):
         feeds[f"topic-{slug(t)}"] = (t, search(TOPIC_QUERIES.get(t, t + " India")))
 
-    index, now = {}, int(time.time() * 1000)
+    index, now, start, fails = {}, int(time.time() * 1000), time.time(), 0
     for key, (label, url) in feeds.items():
-        try:
-            items = parse(fetch(url))
-        except Exception as e:
-            print(f"skip {key}: {e}")
-            continue
-        (OUT / f"{key}.json").write_text(json.dumps({"label": label, "updated": now, "items": items}, ensure_ascii=False), encoding="utf-8")
-        index[key] = {"label": label, "count": len(items)}
-        print(f"{key}: {len(items)}")
-        time.sleep(0.6)
+        data = None
+        if time.time() - start < BUDGET_S and fails < 6:
+            try:
+                data = {"label": label, "updated": now, "items": parse(fetch(url))}
+                fails = 0
+            except Exception as e:
+                fails += 1
+                print(f"google failed for {key}: {e}")
+        if data is None:
+            data = previous(key)
+            print(f"{key}: reused previous copy" if data else f"{key}: skipped")
+            if not data:
+                continue
+        else:
+            print(f"{key}: {len(data['items'])}")
+            time.sleep(0.6)
+        (OUT / f"{key}.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        index[key] = {"label": label, "count": len(data.get("items", []))}
     (OUT / "index.json").write_text(json.dumps({"updated": now, "feeds": index}, ensure_ascii=False, indent=1), encoding="utf-8")
 
 

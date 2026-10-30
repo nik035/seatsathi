@@ -20,6 +20,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,6 +32,7 @@ jobs:
       - name: Fetch Google News feeds (last 24 hours)
         run: python scripts/fetch_news.py
         continue-on-error: true
+        timeout-minutes: 7
       - name: Prepare site folder
         run: |
           mkdir -p _site
